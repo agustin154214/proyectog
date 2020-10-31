@@ -1,0 +1,87 @@
+{% extends 'sisfya/index.html' %}
+
+  {% block content %} {% endblock content %}
+  <title>{% block tittle %} {% endblock tittle %} | LOGIN </title>
+  {% load static %}
+  {% block background %}{% load static %}{% static 'base/img/quienessomos.jpg' %}{% endblock background %}
+
+  {% block headers %}
+  
+<div class="container">
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
+
+      <div class="col-xl-10 col-lg-12 col-md-9">
+
+            <!-- Nested Row within Card Body -->
+            <div class="row">
+
+
+            
+              <!-- <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>-->
+              <div class="col-lg-11">
+                <div class="p-5">
+                  <div class="text-center">
+                    <h1 class="h4 text-gray-900 mb-4">Bienvenido</h1>
+                  <!--<small class="text-danger">
+                      {% if form.errors %}
+                          {% for field in form %}
+                              {% if field.errors %}
+                                  {% for error in field.errors %}
+                                      {{ error|escape }}
+                                  {% endfor %}
+                              {% endif %}
+                          {% endfor %}
+
+                          {% if form.non_field_errors %}
+                              {% for error in form.non_field_errors  %}
+                                    {{ error|escape }}
+                              {% endfor %}
+                          {% endif %}
+                      {% endif %}
+                  </small>-->
+                  </div>
+                  <form class="user" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <input type="text" class="form-control form-control-user" id="id_username" name="username" aria-describedby="emailHelp" placeholder="ingrese su usuario...">
+                    </div>
+                    <div class="form-group">
+                      <input type="password" class="form-control form-control-user" id="id_password" name="password" placeholder="ingresar contraseña">
+                    </div>
+
+                    {#{{form.as_p}}#}
+                  
+                    <button type="submit" class="btn-primary btn-user btn-block">Acceder</button>
+                    <img class="img-responsive" src="{% static 'base/img/logo.png'%}" alt="mi logo">
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+  </div>
+  
+  {% endblock headers %}
+
+
+  {% block js_page %}
+<script>
+   {% if form.errors %}
+         {% for field in form %}
+              {% if field.errors %}
+                   {% for error in field.errors %}
+                         mensaje('{{ error|escape }}','red');
+                   {% endfor %}
+              {% endif %}
+         {% endfor %}
+
+     {% if form.non_field_errors %}
+          {% for error in form.non_field_errors  %}
+               mensaje('{{ error|escape }}','red');
+          {% endfor %}
+     {% endif %}
+   {% endif %}
+</script>
+{% endblock js_page %}
+  
+  
