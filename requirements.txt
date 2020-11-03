@@ -1,0 +1,7 @@
+Django==3.1.2
+django-userforeignkey==0.3.0
+djangorestframework==3.12.1
+psycopg2==2.8.6
+pylint==2.6.0
+xhtml2pdf
+

@@ -44,7 +44,7 @@ class Cliente(ClaseModelo):
         verbose_name_plural = "Centros"
 
 class Menu(ClaseModelo):
-    
+
     nombre_menu = models.CharField(
         max_length=100
     )
@@ -59,7 +59,7 @@ class Menu(ClaseModelo):
     class Meta:
         verbose_name_plural = "Menus"
 
-    
+
 class FacturaEnc(ClaseModelo2):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     fecha = models.DateTimeField(auto_now_add=True)
@@ -80,7 +80,7 @@ class FacturaEnc(ClaseModelo2):
         permissions = [
             ('sup_caja_facturaenc','Permisos de Supervisor de Caja Encabezado')
         ]
-    
+
 
 class FacturaDet(ClaseModelo2):
     factura = models.ForeignKey(FacturaEnc,on_delete=models.CASCADE)
@@ -96,12 +96,12 @@ class FacturaDet(ClaseModelo2):
     def __str__(self):
         return '{}'.format(self.producto)
 
-    def save(self):
-        self.cantidad = int(int(float(self.cantidad_menu)) * int(self.total_alumnos))/40
-        self.sub_total = float(float(int(self.cantidad)) * float(self.precio))
-        self.total = self.sub_total - float(self.descuento)
-        super(FacturaDet, self).save()
-    
+    # def save(self):
+    #     self.cantidad = int(int(float(self.cantidad_menu)) * int(self.total_alumnos))/40
+    #     self.sub_total = float(float(int(self.cantidad)) * float(self.precio))
+    #     self.total = self.sub_total - float(self.descuento)
+    #     super(FacturaDet, self).save()
+
     class Meta:
         verbose_name_plural = "Detalles Facturas"
         verbose_name="Detalle Factura"
@@ -121,12 +121,12 @@ def detalle_fac_guardar(sender,instance,**kwargs):
             .filter(factura=factura_id) \
             .aggregate(sub_total=Sum('sub_total')) \
             .get('sub_total',0.00)
-        
+
         descuento = FacturaDet.objects \
             .filter(factura=factura_id) \
             .aggregate(descuento=Sum('descuento')) \
             .get('descuento',0.00)
-        
+
         enc.sub_total = sub_total
         enc.descuento = descuento
         enc.save()

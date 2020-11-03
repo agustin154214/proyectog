@@ -9,7 +9,7 @@
                             Buscar Insumos
                         </div>
                         <div class="dropdown-divider"></div>
-                        
+                          {% load l10n %}
                         <div class="row">
                                 <table
                                 id="tblProducto"
@@ -20,7 +20,7 @@
                                 data-locale="es-NI"
                                 >
                                 <thead>
-                                  <th data-sortable="true" data-field="id">Id</th>        
+                                  <th data-sortable="true" data-field="id">Id</th>
                                   <th data-sortable="true" data-field="codigo">Código</th>
                                   <th data-field="descripcion">Descripción</th>
                                   <th data-field="marca">Marca</th>
@@ -38,12 +38,12 @@
                                     <td>{{item.unidad}}</td>
                                     <td>{{item.precio}}</td>
                                     <td>
-                                       
-                                        <button class="btn btn-warning btn-circle" id="btnSelect" 
-                                        onclick="seleccionarProducto({{item.id}},'{{item.codigo}}','{{item.descripcion}}','{{item.marca}}','{{item.unidad}}',{{item.precio}})">
+
+                                        <button class="btn btn-warning btn-circle" id="btnSelect"
+                                        onclick="seleccionarProducto({{item.id}},'{{item.codigo}}','{{item.descripcion}}','{{item.marca}}','{{item.unidad}}','{{item.precio|unlocalize}}')">
                                             <i class="far fa-hand-pointer"></i>
                                         </button>
-                                        
+
                                     </td>
                                   </tr>
                                   {% endfor %}
@@ -69,7 +69,7 @@
             </div>
         </div>
     </div>
-</div> 
+</div>
 {% block js_page %}
 <script>
     $(function () {
@@ -87,7 +87,7 @@
         $("#descripcion").val(descripcion);
         $("#marca").val(marca);
         $("#unidad").val(unidad);
-        $("#precio").val(precio);
+        $("#precio").val(parseFloat(precio));
         $("#btnCancelar").click();
         $("#codigo").select();
         $("#codigo").focus();

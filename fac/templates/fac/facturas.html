@@ -49,13 +49,13 @@
                                         Fecha:
                                     </div>
                                     <div class="col-lg-7 form-group">
-                                        <input type="text" name="fecha" id="fecha" class="form-control form-control-user" 
+                                        <input type="text" name="fecha" id="fecha" class="form-control form-control-user"
                                         value="{{ enc.fecha|date:'Y-m-d' }}" readonly />
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-6 p-2 form-group">
-                                
+
                                 <div class="row">
                                     <div class="col-lg-2">Total:</div>
                                     <div class="col-lg-8">
@@ -73,7 +73,7 @@
                 <!-- Sección Derecha -->
                 <div class="col-lg-6 from-group">
                     <div class="row p-2">
-                        
+
                         <div class="col-lg-3">
                             <input type="text" class="form-control" name="codigo" id="codigo" placeholder="Cód. Producto">
                         </div>
@@ -97,12 +97,12 @@
                             <div class="col-lg-6 p-2" >
                             </div>
                     </div>
-                    
+
 
                     <div class="row">
 
                         <div class="col-lg-3">
-                            <input type="number" class="form-control" name="cantidad_menu" id="cantidad_menu" placeholder="Cantidad_menu">
+                            <input type="number" step="any" class="form-control" name="cantidad_menu" id="cantidad_menu" placeholder="Cantidad_menu" required>
                         </div>
 
                          <div class="col-lg-4">
@@ -111,10 +111,10 @@
 
 
                         <div class="col-lg-4">
-                            <input type="number" class="form-control" name="total_alumnos" id="total_alumnos" placeholder="Total_Alumnos" >
+                            <input type="number" class="form-control" name="total_alumnos" id="total_alumnos" placeholder="Total_Alumnos" required>
                         </div>
-                       
-                    
+
+
                     </div>
 
                     <div class="row ">
@@ -126,17 +126,17 @@
                     <div class="row">
                         <div class="col-lg-2">CANTIDAD</div>
                         <div class="col-lg-4">
-                            <input type="number" class="form-control" name="cantidad" id="cantidad" placeholder="Cantidad" readonly>
+                            <input type="number" class="form-control" name="cantidad" id="cantidad" placeholder="Cantidad">
                             <input type="hidden" class="form-control" name="existencia" id="existencia">
                         </div>
 
                         <div class="col-lg-5">
                             <input type="number" class="form-control" name="precio" id="precio" placeholder="Precio" readonly>
                         </div>
-                       
                         <div class="col-lg-1">
                             <button type="submit" class="btn btn-danger" id="btnGuardar"> <i class="far fa-plus-square"></i> </button>
                         </div>
+
                     </div>
 
                      <div class="row ">
@@ -148,20 +148,24 @@
                     <div class="row p-1">
                         <div class="col-lg-9 text-right">Sub Total</div>
                         <div class="col-lg-3">
+                          <input type="hidden" name="descuento"id="descuento_detalle" value="">
                             <input type="number" class="form-control" name="sub_total_detalle" id="sub_total_detalle" placeholder="Sub Total"
-                             value="0.00" disabled>
+                            readonly  >
                         </div>
                     </div>
                     <div class="row p-1">
                         <div class="col-lg-9 text-right">Total</div>
                         <div class="col-lg-3">
                             <input type="number" class="form-control" name="total_detalle" id="total_detalle" placeholder="Total"
-                             value="0.00" disabled>
+                             value="0.00" readonly>
                         </div>
                     </div>
                 </div>
+
                 <!-- Fin Sección Derecha -->
             </div>
+          </form>
+
             <!-- Fin Sección Superior -->
             <!-- Inicio Detalle -->
             <hr>
@@ -177,7 +181,7 @@
                         data-locale="es-NI"
                         >
                         <thead>
-                            <th data-sortable="true" data-field="id">Id.</th>        
+                            <th data-sortable="true" data-field="id">Id.</th>
                             <th data-sortable="true" data-field="codigo">Código</th>
                             <th data-sortable="true" data-field="descripcion">Descripción</th>
                             <th data-field="cantidad">Cant</th>
@@ -210,7 +214,6 @@
         </div>
     </div>
 </div>
-</form>
 {% endblock %}
 {% block js_page %}
 <script>
@@ -219,9 +222,13 @@
     {
         var cant,prec,desc,stotal,total;
 
-        cant = $("#cantidad").val();
-        cant = cant==="" ? 0 : +cant;
-        cant = cant<0 ? 0 : cant;
+        t_almunos = $("#total_alumnos").val();
+        t_almunos = t_almunos==="" ? 0 : +t_almunos;
+        t_almunos = t_almunos<0 ? 0 : t_almunos;
+
+        c_menus = $("#cantidad_menu").val();
+        c_menus = c_menus==="" ? 0 : +c_menus;
+        c_menus = c_menus<0 ? 0 : c_menus;
 
         prec =$('#precio').val();
         prec = prec==="" ? 0 : +prec;
@@ -231,12 +238,18 @@
         desc = desc==="" ? 0 : +desc;
         desc = desc<0 ? 0 : desc;
 
+        cant = $("#cantidad").val();
+        cant = cant==="" ? 0 : +cant;
+        cant = cant<0 ? 0 : cant;
+
+        operacion = (c_menus * t_almunos)/40
+        $('#cantidad').val(Math.round(operacion));
+
         desc = desc>(cant * prec) ? 0 : desc;
 
-        stotal = cant * prec;
+        stotal = $("#cantidad").val() * prec;
         total  = stotal - desc;
 
-        $('#cantidad').val(cant);
         $('#precio').val(prec);
         $('#descuento_detalle').val(desc);
 
@@ -283,7 +296,7 @@
 
                 $("#codigo").val(r.codigo);
                 $("#descripcion").val(r.descripcion);
-                $("#precio").val(r.precio);
+                $("#precio").val(parseFloat(r.precio));
                 $("#existencia").val(r.existencia);
                 $("#cantidad").focus();
 
@@ -331,7 +344,7 @@
             }
         });
 
-        $('#cantidad,#precio,#descuento_detalle').change(function(){
+        $('#precio,#descuento_detalle ,#total_alumnos').change(function(){
             calcular_detalle();
         });
 
@@ -341,11 +354,14 @@
         $("#fecha").val("{{ enc.fecha|date:'Y-m-d' }}");
         $("#sub_total").val("{{ enc.sub_total }}");
         $("#descuento").val("{{ enc.descuento }}");
-        $("#total").val({{ enc.total }});
+        {% load l10n %}
+        float_total = parseFloat({{enc.total|unlocalize}});
+
+        $("#total").val(float_total.toFixed(3));
 
 
-     
-    
+
+
 
     });
 

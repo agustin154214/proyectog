@@ -70,7 +70,7 @@ def clienteInactivar(request,id):
             cliente.save()
             return HttpResponse("OK")
         return HttpResponse("FAIL")
-    
+
     return HttpResponse("FAIL")
 
 
@@ -106,7 +106,7 @@ def menuInactivar(request,id):
             menu.save()
             return HttpResponse("OK")
         return HttpResponse("FAIL")
-    
+
     return HttpResponse("FAIL")
 
 
@@ -125,7 +125,7 @@ def facturas(request,id=None):
 
     detalle = {}
     clientes = Cliente.objects.filter(estado=True)
-    
+
     if request.method == "GET":
         enc = FacturaEnc.objects.filter(pk=id).first()
         if not enc:
@@ -151,7 +151,7 @@ def facturas(request,id=None):
         detalle=FacturaDet.objects.filter(factura=enc)
         contexto = {"enc":encabezado,"det":detalle,"clientes":clientes}
         return render(request,template_name,contexto)
-    
+
     if request.method == "POST":
         cliente = request.POST.get("enc_cliente")
         fecha  = request.POST.get("fecha")
@@ -174,14 +174,14 @@ def facturas(request,id=None):
         if not id:
             messages.error(request,'No Puedo Continuar No Pude Detectar No. de Factura')
             return redirect("fac:factura_list")
-        
+
         codigo = request.POST.get("codigo")
         cantidad_menu = request.POST.get("cantidad_menu")
         total_alumnos = request.POST.get("total_alumnos")
         cantidad = request.POST.get("cantidad")
         precio = request.POST.get("precio")
         s_total = request.POST.get("sub_total_detalle")
-        descuento = request.POST.get("descuento_detalle")
+        descuento = request.POST.get("descuento")
         total = request.POST.get("total_detalle")
 
         prod = Producto.objects.get(codigo=codigo)
@@ -194,17 +194,17 @@ def facturas(request,id=None):
             descuento = descuento,
             total = total
         )
-        
+
         if det:
             det.save()
-        
+
         return redirect("fac:factura_edit",id=id)
 
     return render(request,template_name,contexto)
 
 
 class ProductoView(inv.ProductoView):
-    template_name="fac/buscar_producto.html" 
+    template_name="fac/buscar_producto.html"
 
 
 def borrar_detalle_factura(request, id):
@@ -223,7 +223,7 @@ def borrar_detalle_factura(request, id):
 
         if not user:
             return HttpResponse("Usuario o Clave Incorrecta")
-        
+
         if not user.is_active:
             return HttpResponse("Usuario Inactivo")
 
@@ -238,5 +238,5 @@ def borrar_detalle_factura(request, id):
             return HttpResponse("ok")
 
         return HttpResponse("Usuario no autorizado")
-    
+
     return render(request,template_name,context)
